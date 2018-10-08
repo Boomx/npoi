@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Inoa.NPOI</id>
+    <title>Inoa.NPOI</title>
+    <version>2.3.3</version>
+    <authors>Inoa</authors>
+    <owners>Inoa</owners>
+    <projectUrl>https://github.com/Boomx/npoi</projectUrl>
+    <iconUrl>http://nuget.inoa.com.br/inoa.logo.jpg</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>NPOI library with Inoa improvements</description>
+    <copyright>Copyright 2018</copyright>
+    <tags>file-interface brokertools npoi</tags>
+    <dependencies>
+      <dependency id="SharpZipLib" version="0.86.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\solution\Lib\NPOI.OOXML.dll" target="lib\net40" />
+    <file src="..\solution\Lib\NPOI.OpenXml4Net.dll" target="lib\net40" />
+    <file src="..\solution\Lib\NPOI.OpenXmlFormats.dll" target="lib\net40" />
+    <file src="..\solution\Lib\Inoa.NPOI.dll" target="lib\net40" />
+    <file src="..\solution\Lib\ICSharpCode.SharpZipLib.dll" target="lib\net40" />
+  </files>
+</package>
+
+<!--
+
+v2
+nuget pack Inoa.NPOI.nuspec -OutputDirectory "../build/nuget packages
+nuget push '..\build\nuget packages\Inoa.NPOI.2.3.2.nupkg' '6e6c7405-484d-47b3-914b-3f7a81ce56e3' -Source 'https://inoanugetgallery.azurewebsites.net/'
+
+
+-->
