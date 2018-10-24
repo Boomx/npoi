@@ -3,7 +3,7 @@
   <metadata>
     <id>Inoa.NPOI</id>
     <title>Inoa.NPOI</title>
-    <version>2.3.3</version>
+    <version>2.3.3.1</version>
     <authors>Inoa</authors>
     <owners>Inoa</owners>
     <projectUrl>https://github.com/Boomx/npoi</projectUrl>
@@ -17,19 +17,10 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\solution\Lib\NPOI.OOXML.dll" target="lib\net40" />
-    <file src="..\solution\Lib\NPOI.OpenXml4Net.dll" target="lib\net40" />
-    <file src="..\solution\Lib\NPOI.OpenXmlFormats.dll" target="lib\net40" />
-    <file src="..\solution\Lib\Inoa.NPOI.dll" target="lib\net40" />
-    <file src="..\solution\Lib\ICSharpCode.SharpZipLib.dll" target="lib\net40" />
+    <file src="..\ooxml\bin\x64\Release\NPOI.OOXML.dll" target="lib\net40" />
+    <file src="..\ooxml\bin\x64\Release\NPOI.OpenXml4Net.dll" target="lib\net40" />
+    <file src="..\ooxml\bin\x64\Release\NPOI.OpenXmlFormats.dll" target="lib\net40" />
+    <file src="..\ooxml\bin\x64\Release\Inoa.NPOI.dll" target="lib\net40" />
+    <file src="..\ooxml\bin\x64\Release\ICSharpCode.SharpZipLib.dll" target="lib\net40" />
   </files>
 </package>
-
-<!--
-
-v2
-nuget pack Inoa.NPOI.nuspec -OutputDirectory "../build/nuget packages
-nuget push '..\build\nuget packages\Inoa.NPOI.2.3.2.nupkg' '6e6c7405-484d-47b3-914b-3f7a81ce56e3' -Source 'https://inoanugetgallery.azurewebsites.net/'
-
-
--->

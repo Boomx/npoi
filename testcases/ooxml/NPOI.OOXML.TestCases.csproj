@@ -217,7 +217,7 @@
     <Compile Include="XWPF\XWPFTestDataSamples.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\main\NPOI.csproj">
+    <ProjectReference Include="..\..\main\INOA.NPOI.csproj">
       <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
       <Name>NPOI</Name>
     </ProjectReference>
@@ -284,7 +284,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\solution\visualstudio\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\solution\visualstudio\packages\NUnit.3.10.1\build\NUnit.props'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

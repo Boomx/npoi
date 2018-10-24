@@ -373,7 +373,7 @@
     <Compile Include="Util\EnumConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\main\NPOI.csproj">
+    <ProjectReference Include="..\main\INOA.NPOI.csproj">
       <Project>{10FA8538-157A-4380-A4F6-8E2C3EE92CAE}</Project>
       <Name>NPOI</Name>
     </ProjectReference>
@@ -412,7 +412,7 @@
     <Folder Include="XWPF\Util\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
