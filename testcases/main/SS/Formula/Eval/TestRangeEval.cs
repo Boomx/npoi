@@ -48,14 +48,14 @@ namespace TestCases.SS.Formula.Eval
             Confirm("D7", "B3", "B3:D7");
         }
 
-        private static void Confirm(String refA, String refB, String expectedAreaRef)
+        private static void Confirm(String refA, String refB, String expectedAreaRef, bool isXSSF = false)
         {
 
             ValueEval[] args = {
             CreateRefEval(refA),
             CreateRefEval(refB),
         };
-            AreaReference ar = new AreaReference(expectedAreaRef);
+            AreaReference ar = new AreaReference(expectedAreaRef, isXSSF);
             ValueEval result = EvalInstances.Range.Evaluate(args, 0, (short)0);
             Assert.IsTrue(result is AreaEval);
             AreaEval ae = (AreaEval)result;

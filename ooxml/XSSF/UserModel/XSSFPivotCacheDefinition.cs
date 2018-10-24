@@ -110,7 +110,7 @@ namespace NPOI.XSSF.UserModel
         protected internal void CreateCacheFields(ISheet sheet)
         {
             //Get values for start row, start and end column
-            AreaReference ar = new AreaReference(ctPivotCacheDefinition.cacheSource.worksheetSource.@ref);
+            AreaReference ar = new AreaReference(ctPivotCacheDefinition.cacheSource.worksheetSource.@ref, true);
             CellReference firstCell = ar.FirstCell;
             CellReference lastCell = ar.LastCell;
             int columnStart = firstCell.Col;
