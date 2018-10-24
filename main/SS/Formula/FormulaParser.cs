@@ -726,7 +726,7 @@ namespace NPOI.SS.Formula
             }
             else
             {
-                AreaReference areaRef = CreateAreaRef(part1, part2);
+                AreaReference areaRef = CreateAreaRef(part1, part2, _ssVersion == SpreadsheetVersion.EXCEL2007);
 
                 if (sheetIden == null)
                 {
@@ -739,7 +739,7 @@ namespace NPOI.SS.Formula
             }
             return new ParseNode(ptg);
         }
-        private static AreaReference CreateAreaRef(SimpleRangePart part1, SimpleRangePart part2)
+        private static AreaReference CreateAreaRef(SimpleRangePart part1, SimpleRangePart part2, bool isXSSF = false)
         {
             if (!part1.IsCompatibleForArea(part2))
             {
@@ -748,11 +748,11 @@ namespace NPOI.SS.Formula
             }
             if (part1.IsRow)
             {
-                return AreaReference.GetWholeRow(part1.Rep, part2.Rep);
+                return AreaReference.GetWholeRow(part1.Rep, part2.Rep, isXSSF);
             }
             if (part1.IsColumn)
             {
-                return AreaReference.GetWholeColumn(part1.Rep, part2.Rep);
+                return AreaReference.GetWholeColumn(part1.Rep, part2.Rep, isXSSF);
             }
             return new AreaReference(part1.CellReference, part2.CellReference);
         }
@@ -849,17 +849,17 @@ namespace NPOI.SS.Formula
 
 
         /**
-         * 
-         * "A1", "B3" -> "A1:B3"   
+         *
+         * "A1", "B3" -> "A1:B3"
          * "sheet1!A1", "B3" -> "sheet1!A1:B3"
-         * 
+         *
          * @return <c>null</c> if the range expression cannot / shouldn't be reduced.
          */
         private static Ptg ReduceRangeExpression(Ptg ptgA, Ptg ptgB)
         {
             if (!(ptgB is RefPtg))
             {
-                // only when second ref is simple 2-D ref can the range 
+                // only when second ref is simple 2-D ref can the range
                 // expression be converted To an area ref
                 return null;
             }
@@ -878,7 +878,7 @@ namespace NPOI.SS.Formula
                         refA.IsRowRelative, refB.IsRowRelative, refA.IsColRelative, refB.IsColRelative,
                         refA.ExternSheetIndex);
             }
-            // Note - other operand types (like AreaPtg) which probably can't evaluate 
+            // Note - other operand types (like AreaPtg) which probably can't evaluate
             // do not cause validation errors at Parse time
             return null;
         }
@@ -1079,7 +1079,7 @@ namespace NPOI.SS.Formula
         }
 
         /**
-         * If we have something that looks like [book]Sheet1: or 
+         * If we have something that looks like [book]Sheet1: or
          *  Sheet1, see if it's actually a range eg Sheet1:Sheet2!
          */
         private SheetIdentifier ParseSheetRange(String bookname, NameIdentifier sheet1Name)
@@ -1211,7 +1211,7 @@ namespace NPOI.SS.Formula
 
         /**
          * Generates the variable Function ptg for the formula.
-         * 
+         *
          * For IF Formulas, Additional PTGs are Added To the Tokens
      * @param name a {@link NamePtg} or {@link NameXPtg} or <code>null</code>
          * @return Ptg a null is returned if we're in an IF formula, it needs extreme manipulation and is handled in this Function
@@ -1912,7 +1912,7 @@ namespace NPOI.SS.Formula
 
         /**
          *  API call To execute the parsing of the formula
-         * 
+         *
          */
         private void Parse()
         {

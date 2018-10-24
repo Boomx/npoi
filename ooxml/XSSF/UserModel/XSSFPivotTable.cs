@@ -213,7 +213,7 @@ namespace NPOI.XSSF.UserModel
         protected AreaReference GetPivotArea()
         {
             AreaReference pivotArea = new AreaReference(GetPivotCacheDefinition().
-                    GetCTPivotCacheDefInition().cacheSource.worksheetSource.@ref);
+                    GetCTPivotCacheDefInition().cacheSource.worksheetSource.@ref, true);
             return pivotArea;
         }
 

@@ -38,10 +38,10 @@ namespace NPOI.SS.Util
 
         /**
          * Create an area ref from a string representation.  Sheet names containing special Chars should be
-         * delimited and escaped as per normal syntax rules for formulas.<br/> 
+         * delimited and escaped as per normal syntax rules for formulas.<br/>
          * The area reference must be contiguous (i.e. represent a single rectangle, not a Union of rectangles)
          */
-        public AreaReference(String reference)
+        public AreaReference(String reference, bool isXSSF = false)
         {
             if (!IsContiguous(reference))
             {
@@ -75,7 +75,7 @@ namespace NPOI.SS.Util
                     throw new Exception("Bad area ref '" + reference + "'");
                 }
                 // Special handling for whole-column references
-                // Represented internally as x$1 to x$65536
+                // Represented internally as x$1 to x$65536 or $1048576
                 //  which is the maximum range of rows
 
                 bool firstIsAbs = CellReference.IsPartAbsolute(part0);
@@ -85,7 +85,10 @@ namespace NPOI.SS.Util
                 int col1 = CellReference.ConvertColStringToIndex(part1);
 
                 _firstCell = new CellReference(0, col0, true, firstIsAbs);
-                _lastCell = new CellReference(0xFFFF, col1, true, lastIsAbs);
+
+                _lastCell = new CellReference(isXSSF ?
+                    SpreadsheetVersion.EXCEL2007.LastRowIndex :
+                    SpreadsheetVersion.EXCEL97.LastRowIndex, col1, true, lastIsAbs);
                 _isSingleCell = false;
                 // TODO - whole row refs
             }
@@ -113,14 +116,14 @@ namespace NPOI.SS.Util
             }
             return true;
         }
-        public static AreaReference GetWholeRow(String start, String end)
+        public static AreaReference GetWholeRow(String start, String end, bool isXSSF = false)
         {
-            return new AreaReference("$A" + start + ":$IV" + end);
+            return new AreaReference("$A" + start + ":$IV" + end, isXSSF);
         }
 
-        public static AreaReference GetWholeColumn(String start, String end)
+        public static AreaReference GetWholeColumn(String start, String end, bool isXSSF = false)
         {
-            return new AreaReference(start + "$1:" + end + "$65536");
+            return new AreaReference(start + "$1:" + end + (isXSSF ? "$1048576" : "$65536"), isXSSF);
         }
 
 
@@ -212,13 +215,13 @@ namespace NPOI.SS.Util
          * is the reference for a whole-column reference,
          *  such as C:C or D:G ?
          */
-        public static bool IsWholeColumnReference(CellReference topLeft, CellReference botRight)
+        public static bool IsWholeColumnReference(CellReference topLeft, CellReference botRight, bool isXSSF = false)
         {
             // These are represented as something like
             //   C$1:C$65535 or D$1:F$0
             // i.e. absolute from 1st row to 0th one
             if (topLeft.Row == 0 && topLeft.IsRowAbsolute &&
-                (botRight.Row == -1 || botRight.Row == 65535) && botRight.IsRowAbsolute)
+                (botRight.Row == -1 || botRight.Row == (isXSSF ? 1048575 : 65535)) && botRight.IsRowAbsolute)
             {
                 return true;
             }
@@ -233,7 +236,7 @@ namespace NPOI.SS.Util
          * Takes a non-contiguous area reference, and
          *  returns an array of contiguous area references.
          */
-        public static AreaReference[] GenerateContiguous(String reference)
+        public static AreaReference[] GenerateContiguous(String reference, bool isXSSF = false)
         {
             ArrayList refs = new ArrayList();
             String st = reference;
@@ -241,7 +244,7 @@ namespace NPOI.SS.Util
             foreach (string t in token)
             {
                 refs.Add(
-                        new AreaReference(t)
+                        new AreaReference(t, isXSSF)
                 );
             }
             return (AreaReference[])refs.ToArray(typeof(AreaReference));
@@ -267,8 +270,8 @@ namespace NPOI.SS.Util
         /**
          * Note - if this area reference refers to a single cell, the return value of this method will
          * be identical to that of <c>GetFirstCell()</c>
-         * @return the second cell reference which defines this area.  For multi-cell areas, this is 
-         * cell diagonally opposite the 'first cell'.  Usually this cell is in the lower right corner 
+         * @return the second cell reference which defines this area.  For multi-cell areas, this is
+         * cell diagonally opposite the 'first cell'.  Usually this cell is in the lower right corner
          * of the area (but this is not a requirement).
          */
         public CellReference LastCell
@@ -356,15 +359,15 @@ namespace NPOI.SS.Util
         /**
          * Separates Area refs in two parts and returns them as Separate elements in a String array,
          * each qualified with the sheet name (if present)
-         * 
+         *
          * @return array with one or two elements. never <c>null</c>
          */
         private static String[] SeparateAreaRefs(String reference)
         {
             // TODO - refactor cell reference parsing logic to one place.
-            // Current known incarnations: 
+            // Current known incarnations:
             //   FormulaParser.Name
-            //   CellReference.SeparateRefParts() 
+            //   CellReference.SeparateRefParts()
             //   AreaReference.SeparateAreaRefs() (here)
             //   SheetNameFormatter.format() (inverse)
 
@@ -401,7 +404,7 @@ namespace NPOI.SS.Util
 
                 if (i >= len - 1)
                 {
-                    // reference ends with the delimited name. 
+                    // reference ends with the delimited name.
                     // Assume names like: "Sheet1!'A1'" are never legal.
                     throw new ArgumentException("Area reference '" + reference
                             + "' ends with special name delimiter '" + SPECIAL_NAME_DELIMITER + "'");
@@ -426,7 +429,7 @@ namespace NPOI.SS.Util
             String partB = reference.Substring(delimiterPos + 1);
             if (partB.IndexOf(SHEET_NAME_DELIMITER) >= 0)
             {
-                // TODO - are references like "Sheet1!A1:Sheet1:B2" ever valid?  
+                // TODO - are references like "Sheet1!A1:Sheet1:B2" ever valid?
                 // FormulaParser has code to handle that.
 
                 throw new Exception("Unexpected " + SHEET_NAME_DELIMITER
