@@ -354,9 +354,7 @@ namespace NPOI.OpenXml4Net.Util
         {
             if (value == null)
                 return;
-            WriteAttribute(sw, attributeName, value.ToString(), false);
-            //how to write xsd:datetime data
-            throw new NotImplementedException();
+            WriteAttribute(sw, attributeName, ((DateTime)value).ToString("o"), false);
         }
         public static void LoadXmlSafe(XmlDocument xmlDoc, Stream stream)
         {
